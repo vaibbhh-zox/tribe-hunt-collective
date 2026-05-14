@@ -1,10 +1,8 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { Loader2, ArrowRight } from "lucide-react";
+{"code":"rate-react";
+im sF((gl"e,krtR enrl le"
+ =aoeu d>aCe{",u e= amaC{ po  -<ihl .w {eo   
+  {eg   " lC  ln}an "b }u"tH tb llni:
+ mtRe-oio  t at t-   from "lucide-react";
 import { z } from "zod";
 import { Field, Chips, SuccessView } from "./BrandForm";
 

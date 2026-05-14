@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Check, Loader2, ArrowRight } from "lucide-react";
+import { Check, Loader as Loader2, ArrowRight } from "lucide-react";
 import { z } from "zod";
 
 const schema = z.object({
