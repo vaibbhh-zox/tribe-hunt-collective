@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Check, Loader2, ArrowRight, Building2 } from "lucide-react";
+import { Check, Loader2, ArrowRight } from "lucide-react";
 import { z } from "zod";
 
 const schema = z.object({
@@ -34,7 +34,11 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
     budget_range: "", niche: "", campaign_goal: "", creators_needed: "", deliverables: "", notes: "",
   });
 
-  const reset = () => { setStep(0); setDone(false); setData({ brand_name: "", website: "", instagram_handle: "", contact_person: "", email: "", budget_range: "", niche: "", campaign_goal: "", creators_needed: "", deliverables: "", notes: "" }); };
+  const reset = () => {
+    setStep(0);
+    setDone(false);
+    setData({ brand_name: "", website: "", instagram_handle: "", contact_person: "", email: "", budget_range: "", niche: "", campaign_goal: "", creators_needed: "", deliverables: "", notes: "" });
+  };
 
   const update = (k: string, v: string) => setData((d) => ({ ...d, [k]: v }));
 
@@ -53,76 +57,116 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
   };
 
   const steps = [
-    { title: "About your brand", fields: (
-      <div className="space-y-4">
-        <Field label="Brand name *"><Input value={data.brand_name} onChange={(e) => update("brand_name", e.target.value)} placeholder="Glow Co." /></Field>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Website"><Input value={data.website} onChange={(e) => update("website", e.target.value)} placeholder="https://" /></Field>
-          <Field label="Instagram handle"><Input value={data.instagram_handle} onChange={(e) => update("instagram_handle", e.target.value)} placeholder="@yourbrand" /></Field>
+    {
+      title: "About your brand",
+      fields: (
+        <div className="space-y-5">
+          <Field label="Brand name *">
+            <Input value={data.brand_name} onChange={(e) => update("brand_name", e.target.value)} placeholder="e.g. Auré Beauté" className="luxury-input" />
+          </Field>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Website">
+              <Input value={data.website} onChange={(e) => update("website", e.target.value)} placeholder="https://" className="luxury-input" />
+            </Field>
+            <Field label="Instagram">
+              <Input value={data.instagram_handle} onChange={(e) => update("instagram_handle", e.target.value)} placeholder="@yourbrand" className="luxury-input" />
+            </Field>
+          </div>
         </div>
-      </div>
-    )},
-    { title: "How we reach you", fields: (
-      <div className="space-y-4">
-        <Field label="Contact person *"><Input value={data.contact_person} onChange={(e) => update("contact_person", e.target.value)} placeholder="Your full name" /></Field>
-        <Field label="Email *"><Input type="email" value={data.email} onChange={(e) => update("email", e.target.value)} placeholder="you@brand.com" /></Field>
-      </div>
-    )},
-    { title: "The campaign", fields: (
-      <div className="space-y-4">
-        <Field label="Niche">
-          <Chips options={NICHES} value={data.niche} onChange={(v) => update("niche", v)} />
-        </Field>
-        <Field label="Budget range">
-          <Chips options={BUDGETS} value={data.budget_range} onChange={(v) => update("budget_range", v)} />
-        </Field>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <Field label="Creators needed"><Input value={data.creators_needed} onChange={(e) => update("creators_needed", e.target.value)} placeholder="e.g. 5-10" /></Field>
-          <Field label="Deliverables"><Input value={data.deliverables} onChange={(e) => update("deliverables", e.target.value)} placeholder="2 reels, 3 stories" /></Field>
+      ),
+    },
+    {
+      title: "Your contact details",
+      fields: (
+        <div className="space-y-5">
+          <Field label="Contact person *">
+            <Input value={data.contact_person} onChange={(e) => update("contact_person", e.target.value)} placeholder="Your full name" className="luxury-input" />
+          </Field>
+          <Field label="Email *">
+            <Input type="email" value={data.email} onChange={(e) => update("email", e.target.value)} placeholder="you@brand.com" className="luxury-input" />
+          </Field>
         </div>
-        <Field label="Campaign goal"><Textarea rows={3} value={data.campaign_goal} onChange={(e) => update("campaign_goal", e.target.value)} placeholder="What does success look like?" /></Field>
-        <Field label="Notes"><Textarea rows={2} value={data.notes} onChange={(e) => update("notes", e.target.value)} placeholder="Anything else?" /></Field>
-      </div>
-    )},
+      ),
+    },
+    {
+      title: "Campaign details",
+      fields: (
+        <div className="space-y-5">
+          <Field label="Niche">
+            <Chips options={NICHES} value={data.niche} onChange={(v) => update("niche", v)} />
+          </Field>
+          <Field label="Budget range">
+            <Chips options={BUDGETS} value={data.budget_range} onChange={(v) => update("budget_range", v)} />
+          </Field>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Creators needed">
+              <Input value={data.creators_needed} onChange={(e) => update("creators_needed", e.target.value)} placeholder="e.g. 5–10" className="luxury-input" />
+            </Field>
+            <Field label="Deliverables">
+              <Input value={data.deliverables} onChange={(e) => update("deliverables", e.target.value)} placeholder="2 reels, 3 stories" className="luxury-input" />
+            </Field>
+          </div>
+          <Field label="Campaign goal">
+            <Textarea rows={3} value={data.campaign_goal} onChange={(e) => update("campaign_goal", e.target.value)} placeholder="What does success look like?" className="luxury-input" />
+          </Field>
+          <Field label="Additional notes">
+            <Textarea rows={2} value={data.notes} onChange={(e) => update("notes", e.target.value)} placeholder="Anything else we should know?" className="luxury-input" />
+          </Field>
+        </div>
+      ),
+    },
   ];
 
   const last = step === steps.length - 1;
+  const progress = ((step + 1) / steps.length) * 100;
 
   return (
     <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) setTimeout(reset, 300); }}>
-      <DialogContent className="max-w-xl glass-strong border-border p-0 overflow-hidden">
+      <DialogContent className="max-w-xl bg-background border border-border p-0 overflow-hidden shadow-luxury rounded-none">
         {done ? (
-          <SuccessView title="You're in." subtitle="We'll review your brief and reach out within 48 hours." onClose={() => onOpenChange(false)} />
+          <SuccessView
+            title="Brief received."
+            subtitle="We will review your campaign requirements and be in touch within 48 hours with a curated creator shortlist."
+            onClose={() => onOpenChange(false)}
+          />
         ) : (
           <div>
-            <DialogHeader className="p-6 pb-0">
-              <div className="flex items-center gap-2 mb-2">
-                <Building2 className="h-4 w-4 text-pink" />
-                <span className="text-xs font-mono uppercase tracking-widest text-muted-foreground">Brand intake</span>
-              </div>
-              <DialogTitle className="text-2xl tracking-tight">{steps[step].title}</DialogTitle>
-              <DialogDescription className="text-muted-foreground">Step {step + 1} of {steps.length}</DialogDescription>
-              <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-muted">
-                <div className="h-full bg-gradient-brand transition-all" style={{ width: `${((step + 1) / steps.length) * 100}%` }} />
-              </div>
+            {/* Progress bar */}
+            <div className="h-0.5 bg-border">
+              <div className="h-full bg-gold transition-all duration-500" style={{ width: `${progress}%` }} />
+            </div>
+
+            <DialogHeader className="px-8 pt-8 pb-0">
+              <span className="overline-label mb-3 block">Brand Brief — Step {step + 1} of {steps.length}</span>
+              <DialogTitle className="font-display text-2xl font-light text-foreground">{steps[step].title}</DialogTitle>
+              <DialogDescription className="sr-only">Complete all fields to submit your brand brief.</DialogDescription>
             </DialogHeader>
-            <div className="p-6">{steps[step].fields}</div>
-            <div className="flex items-center justify-between border-t border-border p-4">
+
+            <div className="px-8 py-6">{steps[step].fields}</div>
+
+            <div className="flex items-center justify-between border-t border-border px-8 py-5">
               <button
                 onClick={() => setStep((s) => Math.max(0, s - 1))}
                 disabled={step === 0}
-                className="rounded-full px-4 py-2 text-sm text-muted-foreground hover:text-foreground disabled:opacity-30"
+                className="font-body text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors"
               >
                 Back
               </button>
               {last ? (
-                <button onClick={submit} disabled={submitting} className="inline-flex items-center gap-2 rounded-full bg-gradient-brand px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow transition hover:scale-[1.02] disabled:opacity-60">
-                  {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
-                  Find Creators
+                <button
+                  onClick={submit}
+                  disabled={submitting}
+                  className="font-body text-xs tracking-[0.18em] uppercase border border-foreground bg-foreground text-background px-7 py-3 hover:bg-transparent hover:text-foreground transition-all duration-300 disabled:opacity-50 flex items-center gap-2"
+                >
+                  {submitting && <Loader2 className="h-3 w-3 animate-spin" />}
+                  Submit Brief
                 </button>
               ) : (
-                <button onClick={() => setStep((s) => s + 1)} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-brand px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:scale-[1.02]">
-                  Continue <ArrowRight className="h-4 w-4" />
+                <button
+                  onClick={() => setStep((s) => s + 1)}
+                  className="font-body text-xs tracking-[0.18em] uppercase border border-foreground px-7 py-3 text-foreground hover:bg-foreground hover:text-background transition-all duration-300 flex items-center gap-2"
+                >
+                  Continue <ArrowRight className="h-3 w-3" />
                 </button>
               )}
             </div>
@@ -133,16 +177,16 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
   );
 }
 
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
+export function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <Label className="mb-1.5 block text-xs uppercase tracking-wider text-muted-foreground">{label}</Label>
+      <Label className="mb-2 block overline-label">{label}</Label>
       {children}
     </div>
   );
 }
 
-function Chips({ options, value, onChange }: { options: string[]; value: string; onChange: (v: string) => void }) {
+export function Chips({ options, value, onChange }: { options: string[]; value: string; onChange: (v: string) => void }) {
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((o) => (
@@ -151,8 +195,10 @@ function Chips({ options, value, onChange }: { options: string[]; value: string;
           type="button"
           onClick={() => onChange(o)}
           className={
-            "rounded-full border px-3.5 py-1.5 text-xs transition " +
-            (value === o ? "border-pink bg-pink/10 text-foreground ring-glow" : "border-border bg-card/40 text-muted-foreground hover:text-foreground hover:border-foreground/30")
+            "font-body text-xs tracking-[0.1em] uppercase border px-4 py-2 transition-all duration-200 " +
+            (value === o
+              ? "border-foreground bg-foreground text-background"
+              : "border-border text-muted-foreground hover:border-foreground/50 hover:text-foreground")
           }
         >
           {o}
@@ -164,17 +210,18 @@ function Chips({ options, value, onChange }: { options: string[]; value: string;
 
 export function SuccessView({ title, subtitle, onClose }: { title: string; subtitle: string; onClose: () => void }) {
   return (
-    <div className="px-8 py-14 text-center">
-      <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-gradient-brand shadow-glow animate-fade-up">
-        <Check className="h-8 w-8 text-primary-foreground" />
+    <div className="px-10 py-16 text-center">
+      <div className="mx-auto flex h-14 w-14 items-center justify-center border border-gold/50 mb-8">
+        <Check className="h-6 w-6 text-gold" />
       </div>
-      <h3 className="mt-6 text-2xl font-bold tracking-tight">{title}</h3>
-      <p className="mt-2 text-sm text-muted-foreground">{subtitle}</p>
-      <button onClick={onClose} className="mt-8 rounded-full bg-gradient-brand px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow">
-        Done
+      <h3 className="font-display text-3xl font-light text-foreground">{title}</h3>
+      <p className="mt-3 font-body text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">{subtitle}</p>
+      <button
+        onClick={onClose}
+        className="mt-10 font-body text-xs tracking-[0.18em] uppercase border border-foreground px-7 py-3 text-foreground hover:bg-foreground hover:text-background transition-all duration-300"
+      >
+        Close
       </button>
     </div>
   );
 }
-
-export { Field, Chips };

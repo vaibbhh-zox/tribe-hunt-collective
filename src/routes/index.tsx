@@ -1,9 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/SiteChrome";
-import { GradientBlobs } from "@/components/GradientBlobs";
 import { Hero } from "@/components/Hero";
-import { HowItWorks, WhyTribeHunt, CategoriesSection, BrandCollabs, Testimonials, CTASection } from "@/components/LandingSections";
+import {
+  ServicesSection,
+  CreatorRoster,
+  BrandProcess,
+  CreatorOnboarding,
+  Testimonials,
+  CTASection,
+} from "@/components/LandingSections";
 import { BrandForm } from "@/components/BrandForm";
 import { CreatorForm } from "@/components/CreatorForm";
 
@@ -16,15 +22,14 @@ function Index() {
   const [creatorOpen, setCreatorOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
-      <GradientBlobs />
+    <div className="relative min-h-screen overflow-x-hidden bg-background">
       <SiteHeader />
       <main>
         <Hero onBrand={() => setBrandOpen(true)} onCreator={() => setCreatorOpen(true)} />
-        <HowItWorks />
-        <WhyTribeHunt />
-        <CategoriesSection />
-        <BrandCollabs />
+        <ServicesSection />
+        <CreatorRoster />
+        <BrandProcess />
+        <CreatorOnboarding />
         <Testimonials />
         <CTASection onBrand={() => setBrandOpen(true)} onCreator={() => setCreatorOpen(true)} />
       </main>

@@ -1,5 +1,3 @@
-import { ArrowRight, Sparkles } from "lucide-react";
-
 interface HeroProps {
   onBrand: () => void;
   onCreator: () => void;
@@ -7,67 +5,92 @@ interface HeroProps {
 
 export function Hero({ onBrand, onCreator }: HeroProps) {
   return (
-    <section className="relative pt-40 pb-24 px-6">
-      <div className="mx-auto max-w-5xl text-center">
-        <div className="animate-fade-up inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur">
-          <Sparkles className="h-3.5 w-3.5 text-pink" />
-          Lead-gen for influencer marketing
+    <section className="relative min-h-screen flex flex-col justify-end pb-24 pt-32 px-6 md:px-12 overflow-hidden">
+      {/* Subtle warm background gradient */}
+      <div className="absolute inset-0 bg-warm-gradient -z-10" />
+
+      {/* Editorial large text backdrop */}
+      <div className="absolute top-0 right-0 -z-10 overflow-hidden pointer-events-none select-none">
+        <span
+          className="font-display text-[22vw] font-light text-foreground/[0.03] leading-none whitespace-nowrap"
+          aria-hidden
+        >
+          BEAUTÉ
+        </span>
+      </div>
+
+      <div className="mx-auto max-w-7xl w-full">
+        {/* Eyebrow */}
+        <div className="animate-fade-up flex items-center gap-3 mb-10">
+          <span className="block w-10 h-px bg-gold opacity-70" />
+          <span className="overline-label">Luxury Beauty Creator Agency</span>
         </div>
 
-        <h1
-          className="animate-fade-up mt-8 text-5xl font-bold tracking-tight sm:text-6xl md:text-7xl lg:text-8xl"
-          style={{ animationDelay: "0.1s", letterSpacing: "-0.04em" }}
-        >
-          Where{" "}
-          <span className="text-gradient">Brands</span>
-          <br />
-          Meet{" "}
-          <span className="text-gradient">Creators.</span>
-        </h1>
+        {/* Main headline — editorial split layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-0 items-end">
+          <div className="lg:col-span-8">
+            <h1
+              className="display-hero text-foreground animate-fade-up"
+              style={{ animationDelay: "0.1s" }}
+            >
+              Where art
+              <br />
+              <em className="not-italic text-gold">meets</em>
+              <br />
+              influence.
+            </h1>
+          </div>
 
-        <p
-          className="animate-fade-up mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg"
-          style={{ animationDelay: "0.2s" }}
-        >
-          Helping brands discover the right creators — and helping creators land
-          paid collaborations they actually want.
-        </p>
+          <div
+            className="lg:col-span-4 lg:pb-4 animate-fade-up"
+            style={{ animationDelay: "0.25s" }}
+          >
+            <p className="font-body text-base text-muted-foreground leading-relaxed max-w-xs">
+              We curate extraordinary partnerships between visionary beauty brands and the creators who define culture.
+            </p>
 
-        <div
-          className="animate-fade-up mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
-          style={{ animationDelay: "0.3s" }}
-        >
-          <button
-            onClick={onBrand}
-            className="group relative inline-flex items-center gap-2 rounded-full bg-gradient-brand px-7 py-3.5 text-sm font-semibold text-primary-foreground shadow-glow transition-all hover:scale-[1.03] hover:shadow-[0_25px_90px_-15px_oklch(0.72_0.22_340/0.7)]"
-          >
-            I'm a Brand
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </button>
-          <button
-            onClick={onCreator}
-            className="group inline-flex items-center gap-2 rounded-full border border-border bg-card/40 px-7 py-3.5 text-sm font-semibold text-foreground backdrop-blur transition-all hover:border-foreground/30 hover:bg-card/70"
-          >
-            I'm a Creator
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </button>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={onBrand}
+                className="font-body text-xs tracking-[0.18em] uppercase border border-foreground bg-foreground text-background px-7 py-4 hover:bg-transparent hover:text-foreground transition-all duration-300"
+              >
+                For Brands
+              </button>
+              <button
+                onClick={onCreator}
+                className="font-body text-xs tracking-[0.18em] uppercase border border-foreground px-7 py-4 text-foreground hover:bg-foreground hover:text-background transition-all duration-300"
+              >
+                For Creators
+              </button>
+            </div>
+          </div>
         </div>
 
+        {/* Stats row */}
         <div
-          className="animate-fade-up mt-20 grid grid-cols-3 gap-6 sm:gap-12"
+          className="mt-20 grid grid-cols-3 gap-0 border-t border-border pt-8 animate-fade-up"
           style={{ animationDelay: "0.4s" }}
         >
           {[
-            { v: "2,400+", l: "Creators" },
-            { v: "180+", l: "Brand campaigns" },
-            { v: "5", l: "Core niches" },
-          ].map((s) => (
-            <div key={s.l} className="text-center">
-              <div className="text-2xl font-bold text-gradient sm:text-4xl">{s.v}</div>
-              <div className="mt-1 text-xs text-muted-foreground sm:text-sm">{s.l}</div>
+            { v: "340+", l: "Elite Creators" },
+            { v: "180+", l: "Brand Campaigns" },
+            { v: "98%", l: "Client Return Rate" },
+          ].map((s, i) => (
+            <div
+              key={s.l}
+              className={"py-2 " + (i > 0 ? "pl-8 md:pl-14 border-l border-border" : "")}
+            >
+              <div className="font-display text-3xl md:text-5xl font-light text-foreground">{s.v}</div>
+              <div className="overline-label mt-1">{s.l}</div>
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in" style={{ animationDelay: "1s" }}>
+        <span className="overline-label text-[0.55rem]">Scroll</span>
+        <div className="w-px h-10 bg-gradient-to-b from-foreground/20 to-transparent" />
       </div>
     </section>
   );

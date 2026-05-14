@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
-import { Loader2, LogOut, Search, Download, Building2, User as UserIcon, Mail, Instagram, Filter } from "lucide-react";
+import { Loader2, LogOut, Search, Download, Building2, User as UserIcon, Mail, Instagram, SlidersHorizontal } from "lucide-react";
 import type { Session } from "@supabase/supabase-js";
 
 export const Route = createFileRoute("/admin")({
@@ -14,12 +14,19 @@ export const Route = createFileRoute("/admin")({
 
 type LeadStatus = "new" | "contacted" | "in_progress" | "closed";
 
-const STATUSES: { v: LeadStatus; label: string; color: string }[] = [
-  { v: "new", label: "New", color: "oklch(0.72 0.22 340)" },
-  { v: "contacted", label: "Contacted", color: "oklch(0.7 0.18 220)" },
-  { v: "in_progress", label: "In Progress", color: "oklch(0.78 0.16 80)" },
-  { v: "closed", label: "Closed", color: "oklch(0.55 0.05 280)" },
+const STATUSES: { v: LeadStatus; label: string }[] = [
+  { v: "new", label: "New" },
+  { v: "contacted", label: "Contacted" },
+  { v: "in_progress", label: "In Progress" },
+  { v: "closed", label: "Closed" },
 ];
+
+const STATUS_COLORS: Record<LeadStatus, string> = {
+  new: "oklch(0.55 0.15 150)",
+  contacted: "oklch(0.55 0.15 220)",
+  in_progress: "oklch(0.68 0.1 72)",
+  closed: "oklch(0.55 0.02 55)",
+};
 
 function AdminPage() {
   const [session, setSession] = useState<Session | null>(null);
@@ -34,15 +41,15 @@ function AdminPage() {
 
   useEffect(() => {
     if (!session) { setIsAdmin(false); return; }
-    // Probe admin by attempting a select on user_roles (admin-only RLS) — alt: check via has_role server side.
-    // Simpler: try to read brands. If allowed, admin.
-    supabase.from("brands").select("id").limit(1).then(({ error }) => {
-      setIsAdmin(!error);
-    });
+    supabase.from("brands").select("id").limit(1).then(({ error }) => { setIsAdmin(!error); });
   }, [session]);
 
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center"><Loader2 className="h-6 w-6 animate-spin text-pink" /></div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+      </div>
+    );
   }
 
   if (!session) return <LoginView />;
@@ -69,30 +76,39 @@ function LoginView() {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center px-6">
-      <div className="absolute inset-0 bg-glow opacity-50 -z-10" />
-      <form onSubmit={submit} className="glass-strong w-full max-w-md rounded-3xl p-8">
-        <div className="flex items-center gap-2 mb-1">
-          <div className="h-7 w-7 rounded-full bg-gradient-brand shadow-glow" />
-          <span className="text-base font-semibold tracking-tight">Tribe Hunt</span>
+    <div className="min-h-screen flex items-center justify-center px-6 bg-background">
+      <form onSubmit={submit} className="w-full max-w-md border border-border bg-card p-10 shadow-card-light">
+        <div className="flex flex-col leading-none mb-8">
+          <span className="font-display text-xl font-light tracking-[0.08em]">MAISON</span>
+          <span className="font-display text-xl font-light tracking-[0.08em] text-gold -mt-1">LUMIÈRE</span>
         </div>
-        <h1 className="mt-6 text-2xl font-bold tracking-tight">Admin {mode === "signin" ? "sign in" : "sign up"}</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Access the leads dashboard.</p>
-        <div className="mt-6 space-y-4">
+        <h1 className="font-display text-2xl font-light text-foreground mb-1">
+          {mode === "signin" ? "Admin sign in" : "Create account"}
+        </h1>
+        <p className="font-body text-sm text-muted-foreground mb-8">Access the leads dashboard.</p>
+        <div className="space-y-5">
           <div>
-            <Label className="mb-1.5 block text-xs uppercase tracking-wider text-muted-foreground">Email</Label>
-            <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Label className="overline-label mb-2 block">Email</Label>
+            <Input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="bg-background" />
           </div>
           <div>
-            <Label className="mb-1.5 block text-xs uppercase tracking-wider text-muted-foreground">Password</Label>
-            <Input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Label className="overline-label mb-2 block">Password</Label>
+            <Input type="password" required minLength={6} value={password} onChange={(e) => setPassword(e.target.value)} className="bg-background" />
           </div>
         </div>
-        <button type="submit" disabled={busy} className="mt-6 w-full inline-flex items-center justify-center gap-2 rounded-full bg-gradient-brand px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow disabled:opacity-60">
-          {busy && <Loader2 className="h-4 w-4 animate-spin" />}
+        <button
+          type="submit"
+          disabled={busy}
+          className="mt-8 w-full font-body text-xs tracking-[0.18em] uppercase border border-foreground bg-foreground text-background py-3.5 hover:bg-transparent hover:text-foreground transition-all duration-300 disabled:opacity-50 flex items-center justify-center gap-2"
+        >
+          {busy && <Loader2 className="h-3 w-3 animate-spin" />}
           {mode === "signin" ? "Sign in" : "Create account"}
         </button>
-        <button type="button" onClick={() => setMode((m) => m === "signin" ? "signup" : "signin")} className="mt-4 w-full text-xs text-muted-foreground hover:text-foreground">
+        <button
+          type="button"
+          onClick={() => setMode((m) => m === "signin" ? "signup" : "signin")}
+          className="mt-4 w-full font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
           {mode === "signin" ? "Need an account? Sign up" : "Have an account? Sign in"}
         </button>
       </form>
@@ -102,16 +118,21 @@ function LoginView() {
 
 function NoAccessView({ email }: { email: string }) {
   return (
-    <div className="min-h-screen flex items-center justify-center px-6">
-      <div className="glass-strong max-w-md rounded-3xl p-8 text-center">
-        <h1 className="text-xl font-bold">No admin access</h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          You're signed in as <span className="text-foreground">{email}</span>, but this account isn't an admin yet.
+    <div className="min-h-screen flex items-center justify-center px-6 bg-background">
+      <div className="max-w-md border border-border bg-card p-10 text-center shadow-card-light">
+        <h1 className="font-display text-2xl font-light text-foreground">No admin access</h1>
+        <p className="mt-3 font-body text-sm text-muted-foreground">
+          Signed in as <span className="text-foreground">{email}</span>, but this account has no admin role yet.
         </p>
-        <p className="mt-4 text-xs text-muted-foreground">
-          The agency owner needs to grant you the <code className="text-pink">admin</code> role in the backend (table <code className="text-pink">user_roles</code>).
+        <p className="mt-3 font-body text-xs text-muted-foreground">
+          The agency owner must grant the <code className="text-gold">admin</code> role in <code className="text-gold">user_roles</code>.
         </p>
-        <button onClick={() => supabase.auth.signOut()} className="mt-6 rounded-full border border-border px-4 py-2 text-sm">Sign out</button>
+        <button
+          onClick={() => supabase.auth.signOut()}
+          className="mt-8 font-body text-xs tracking-[0.15em] uppercase border border-border px-5 py-2.5 hover:border-foreground transition-colors"
+        >
+          Sign out
+        </button>
       </div>
     </div>
   );
@@ -203,21 +224,23 @@ function Dashboard({ email }: { email: string }) {
   const counts = {
     brands: brands.length,
     creators: creators.length,
-    new: [...brands, ...creators].filter((x) => x.status === "new").length,
+    newLeads: [...brands, ...creators].filter((x) => x.status === "new").length,
   };
 
   return (
-    <div className="relative min-h-screen">
-      <header className="border-b border-border/60 backdrop-blur sticky top-0 z-30 bg-background/80">
+    <div className="min-h-screen bg-background">
+      <header className="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-30">
         <div className="mx-auto max-w-7xl px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="h-6 w-6 rounded-full bg-gradient-brand" />
-            <span className="font-semibold">Tribe Hunt</span>
-            <span className="ml-3 text-xs text-muted-foreground">Admin</span>
+          <div className="flex flex-col leading-none">
+            <span className="font-display text-base font-light tracking-[0.08em]">MAISON</span>
+            <span className="font-display text-base font-light tracking-[0.08em] text-gold -mt-0.5">LUMIÈRE</span>
           </div>
-          <div className="flex items-center gap-3 text-sm">
-            <span className="hidden sm:inline text-muted-foreground">{email}</span>
-            <button onClick={() => supabase.auth.signOut()} className="inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs hover:border-foreground/30">
+          <div className="flex items-center gap-4">
+            <span className="overline-label hidden sm:block">{email}</span>
+            <button
+              onClick={() => supabase.auth.signOut()}
+              className="font-body text-xs tracking-[0.12em] uppercase flex items-center gap-1.5 text-muted-foreground hover:text-foreground transition-colors"
+            >
               <LogOut className="h-3.5 w-3.5" /> Sign out
             </button>
           </div>
@@ -225,34 +248,43 @@ function Dashboard({ email }: { email: string }) {
       </header>
 
       <div className="mx-auto max-w-7xl px-6 py-8">
-        <div className="grid gap-3 sm:grid-cols-3 mb-8">
-          <Stat label="Brand leads" value={counts.brands} icon={Building2} />
-          <Stat label="Creator leads" value={counts.creators} icon={UserIcon} />
-          <Stat label="New (unread)" value={counts.new} icon={Filter} />
+        {/* Stats */}
+        <div className="grid gap-4 sm:grid-cols-3 mb-8">
+          <Stat label="Brand Briefs" value={counts.brands} icon={Building2} />
+          <Stat label="Creator Applications" value={counts.creators} icon={UserIcon} />
+          <Stat label="New This Week" value={counts.newLeads} icon={SlidersHorizontal} />
         </div>
 
+        {/* Toolbar */}
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 justify-between mb-5">
-          <div className="inline-flex glass rounded-full p-1">
+          <div className="inline-flex border border-border">
             <TabBtn active={tab === "brands"} onClick={() => setTab("brands")}>Brands ({brands.length})</TabBtn>
             <TabBtn active={tab === "creators"} onClick={() => setTab("creators")}>Creators ({creators.length})</TabBtn>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="pl-9 w-56" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+              <Input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search…" className="pl-9 w-52 bg-background text-sm" />
             </div>
-            <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value as LeadStatus | "all")}
-              className="rounded-md border border-input bg-background px-3 py-2 text-sm">
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value as LeadStatus | "all")}
+              className="border border-border bg-background px-3 py-2 font-body text-xs tracking-wide text-foreground"
+            >
               <option value="all">All statuses</option>
               {STATUSES.map((s) => <option key={s.v} value={s.v}>{s.label}</option>)}
             </select>
-            <button onClick={exportCsv} className="inline-flex items-center gap-1.5 rounded-md border border-border px-3 py-2 text-xs hover:border-foreground/30">
+            <button
+              onClick={exportCsv}
+              className="font-body text-xs tracking-[0.12em] uppercase flex items-center gap-1.5 border border-border px-3 py-2 text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+            >
               <Download className="h-3.5 w-3.5" /> Export
             </button>
           </div>
         </div>
 
-        <div className="glass rounded-2xl overflow-hidden">
+        {/* Table */}
+        <div className="border border-border overflow-hidden">
           {tab === "brands" ? (
             <BrandsTable rows={filteredBrands} onSelect={setSelected} onStatus={updateStatus} />
           ) : (
@@ -276,7 +308,13 @@ function Dashboard({ email }: { email: string }) {
 
 function TabBtn({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
-    <button onClick={onClick} className={"rounded-full px-4 py-1.5 text-sm transition " + (active ? "bg-gradient-brand text-primary-foreground shadow-glow" : "text-muted-foreground hover:text-foreground")}>
+    <button
+      onClick={onClick}
+      className={
+        "font-body text-xs tracking-[0.12em] uppercase px-5 py-2.5 transition-colors " +
+        (active ? "bg-foreground text-background" : "text-muted-foreground hover:text-foreground")
+      }
+    >
       {children}
     </button>
   );
@@ -284,22 +322,34 @@ function TabBtn({ active, onClick, children }: { active: boolean; onClick: () =>
 
 function Stat({ label, value, icon: Icon }: { label: string; value: number; icon: React.ComponentType<{ className?: string }> }) {
   return (
-    <div className="glass rounded-2xl p-5 flex items-center justify-between">
+    <div className="border border-border bg-card p-6 flex items-center justify-between shadow-card-light">
       <div>
-        <div className="text-xs uppercase tracking-wider text-muted-foreground">{label}</div>
-        <div className="mt-1 text-3xl font-bold text-gradient">{value}</div>
+        <div className="overline-label mb-1">{label}</div>
+        <div className="font-display text-4xl font-light text-foreground">{value}</div>
       </div>
-      <Icon className="h-6 w-6 text-pink" />
+      <Icon className="h-5 w-5 text-gold" />
     </div>
   );
 }
 
 function StatusBadge({ status, onChange }: { status: LeadStatus; onChange?: (s: LeadStatus) => void }) {
-  const s = STATUSES.find((x) => x.v === status) ?? STATUSES[0];
-  if (!onChange) return <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs" style={{ color: s.color }}><span className="h-1.5 w-1.5 rounded-full" style={{ background: s.color }} />{s.label}</span>;
+  const color = STATUS_COLORS[status];
+  const label = STATUSES.find((x) => x.v === status)?.label ?? status;
+  if (!onChange) {
+    return (
+      <span className="inline-flex items-center gap-1.5 font-body text-xs" style={{ color }}>
+        <span className="h-1.5 w-1.5 rounded-full flex-shrink-0" style={{ background: color }} />
+        {label}
+      </span>
+    );
+  }
   return (
-    <select value={status} onChange={(e) => onChange(e.target.value as LeadStatus)} onClick={(e) => e.stopPropagation()}
-      className="rounded-full border border-border bg-background/60 px-2.5 py-1 text-xs">
+    <select
+      value={status}
+      onChange={(e) => onChange(e.target.value as LeadStatus)}
+      onClick={(e) => e.stopPropagation()}
+      className="border border-border bg-background px-2 py-1 font-body text-xs text-foreground"
+    >
       {STATUSES.map((x) => <option key={x.v} value={x.v}>{x.label}</option>)}
     </select>
   );
@@ -310,24 +360,24 @@ function BrandsTable({ rows, onSelect, onStatus }: { rows: Brand[]; onSelect: (r
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
-        <thead className="text-xs uppercase tracking-wider text-muted-foreground border-b border-border">
+        <thead className="bg-accent/30 border-b border-border">
           <tr>
             <Th>Brand</Th><Th>Contact</Th><Th>Email</Th><Th>Niche</Th><Th>Budget</Th><Th>Status</Th><Th>Date</Th>
           </tr>
         </thead>
         <tbody>
           {rows.map((b) => (
-            <tr key={b.id} onClick={() => onSelect(b)} className="border-b border-border/40 hover:bg-card/40 cursor-pointer">
+            <tr key={b.id} onClick={() => onSelect(b)} className="border-b border-border hover:bg-accent/20 cursor-pointer transition-colors">
               <Td>
-                <div className="font-semibold">{b.brand_name}</div>
-                {b.instagram_handle && <div className="text-xs text-muted-foreground">{b.instagram_handle}</div>}
+                <div className="font-body text-sm font-medium text-foreground">{b.brand_name}</div>
+                {b.instagram_handle && <div className="font-body text-xs text-muted-foreground">{b.instagram_handle}</div>}
               </Td>
               <Td>{b.contact_person}</Td>
               <Td className="text-muted-foreground">{b.email}</Td>
               <Td>{b.niche || "—"}</Td>
               <Td>{b.budget_range || "—"}</Td>
               <Td><StatusBadge status={b.status} onChange={(s) => onStatus(b.id, s)} /></Td>
-              <Td className="text-xs text-muted-foreground">{new Date(b.created_at).toLocaleDateString()}</Td>
+              <Td className="text-muted-foreground">{new Date(b.created_at).toLocaleDateString()}</Td>
             </tr>
           ))}
         </tbody>
@@ -341,24 +391,24 @@ function CreatorsTable({ rows, onSelect, onStatus }: { rows: Creator[]; onSelect
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
-        <thead className="text-xs uppercase tracking-wider text-muted-foreground border-b border-border">
+        <thead className="bg-accent/30 border-b border-border">
           <tr>
             <Th>Creator</Th><Th>Email</Th><Th>Niche</Th><Th>Followers</Th><Th>Platforms</Th><Th>Status</Th><Th>Date</Th>
           </tr>
         </thead>
         <tbody>
           {rows.map((c) => (
-            <tr key={c.id} onClick={() => onSelect(c)} className="border-b border-border/40 hover:bg-card/40 cursor-pointer">
+            <tr key={c.id} onClick={() => onSelect(c)} className="border-b border-border hover:bg-accent/20 cursor-pointer transition-colors">
               <Td>
-                <div className="font-semibold">{c.full_name}</div>
-                <div className="text-xs text-muted-foreground">{c.instagram_handle}</div>
+                <div className="font-body text-sm font-medium text-foreground">{c.full_name}</div>
+                <div className="font-body text-xs text-muted-foreground">{c.instagram_handle}</div>
               </Td>
               <Td className="text-muted-foreground">{c.email}</Td>
               <Td>{c.niche || "—"}</Td>
               <Td>{c.followers_count || "—"}</Td>
-              <Td className="text-xs">{c.platforms?.join(", ") || "—"}</Td>
+              <Td className="text-xs text-muted-foreground">{c.platforms?.join(", ") || "—"}</Td>
               <Td><StatusBadge status={c.status} onChange={(s) => onStatus(c.id, s)} /></Td>
-              <Td className="text-xs text-muted-foreground">{new Date(c.created_at).toLocaleDateString()}</Td>
+              <Td className="text-muted-foreground">{new Date(c.created_at).toLocaleDateString()}</Td>
             </tr>
           ))}
         </tbody>
@@ -367,11 +417,20 @@ function CreatorsTable({ rows, onSelect, onStatus }: { rows: Creator[]; onSelect
   );
 }
 
-const Th = ({ children }: { children: React.ReactNode }) => <th className="px-4 py-3 text-left font-medium">{children}</th>;
-const Td = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => <td className={"px-4 py-3 align-top " + className}>{children}</td>;
+const Th = ({ children }: { children: React.ReactNode }) => (
+  <th className="px-4 py-3 text-left overline-label">{children}</th>
+);
+const Td = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
+  <td className={"px-4 py-3 align-top font-body text-sm " + className}>{children}</td>
+);
 
 function Empty() {
-  return <div className="p-12 text-center text-sm text-muted-foreground">No leads yet — submissions from the landing page will appear here.</div>;
+  return (
+    <div className="p-16 text-center">
+      <p className="font-display text-xl font-light text-muted-foreground">No leads yet</p>
+      <p className="font-body text-sm text-muted-foreground/60 mt-2">Submissions from the landing page will appear here.</p>
+    </div>
+  );
 }
 
 function DetailDrawer({ lead, kind, onClose, onSaveNotes, onStatus }: {
@@ -386,25 +445,39 @@ function DetailDrawer({ lead, kind, onClose, onSaveNotes, onStatus }: {
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end" onClick={onClose}>
-      <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
-      <div onClick={(e) => e.stopPropagation()} className="relative w-full max-w-lg overflow-y-auto bg-card border-l border-border p-6 animate-fade-up">
-        <button onClick={onClose} className="absolute top-4 right-4 text-xs text-muted-foreground hover:text-foreground">Close ✕</button>
-        <div className="text-xs font-mono uppercase tracking-widest text-pink mb-2">{isBrand ? "Brand" : "Creator"}</div>
-        <h2 className="text-2xl font-bold tracking-tight">{isBrand ? b.brand_name : c.full_name}</h2>
-        <div className="mt-3"><StatusBadge status={lead.status} onChange={onStatus} /></div>
+      <div className="absolute inset-0 bg-foreground/10 backdrop-blur-sm" />
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className="relative w-full max-w-lg overflow-y-auto bg-background border-l border-border p-8 shadow-luxury animate-slide-up"
+      >
+        <button onClick={onClose} className="absolute top-6 right-6 overline-label text-muted-foreground hover:text-foreground transition-colors">
+          Close ✕
+        </button>
+
+        <span className="overline-label mb-3 block">{isBrand ? "Brand Brief" : "Creator Profile"}</span>
+        <h2 className="font-display text-3xl font-light text-foreground">{isBrand ? b.brand_name : c.full_name}</h2>
+        <div className="mt-4"><StatusBadge status={lead.status} onChange={onStatus} /></div>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          <a href={`mailto:${isBrand ? b.email : c.email}`} className="inline-flex items-center gap-1.5 rounded-full bg-gradient-brand px-4 py-2 text-xs font-semibold text-primary-foreground">
-            <Mail className="h-3.5 w-3.5" /> Email
+          <a
+            href={`mailto:${isBrand ? b.email : c.email}`}
+            className="font-body text-xs tracking-[0.15em] uppercase border border-foreground bg-foreground text-background px-4 py-2 hover:bg-transparent hover:text-foreground transition-all flex items-center gap-1.5"
+          >
+            <Mail className="h-3 w-3" /> Send email
           </a>
           {igHandle && (
-            <a href={`https://instagram.com/${igHandle}`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-2 text-xs">
-              <Instagram className="h-3.5 w-3.5" /> @{igHandle}
+            <a
+              href={`https://instagram.com/${igHandle}`}
+              target="_blank"
+              rel="noreferrer"
+              className="font-body text-xs tracking-[0.15em] uppercase border border-border px-4 py-2 text-muted-foreground hover:text-foreground hover:border-foreground transition-all flex items-center gap-1.5"
+            >
+              <Instagram className="h-3 w-3" /> @{igHandle}
             </a>
           )}
         </div>
 
-        <dl className="mt-6 space-y-3 text-sm">
+        <dl className="mt-8 space-y-4 border-t border-border pt-6">
           {isBrand ? (
             <>
               <Detail k="Contact" v={b.contact_person} />
@@ -424,20 +497,25 @@ function DetailDrawer({ lead, kind, onClose, onSaveNotes, onStatus }: {
               <Detail k="Location" v={c.location} />
               <Detail k="Niche" v={c.niche} />
               <Detail k="Followers" v={c.followers_count} />
-              <Detail k="Engagement" v={c.engagement_rate} />
+              <Detail k="Engagement rate" v={c.engagement_rate} />
               <Detail k="Platforms" v={c.platforms?.join(", ")} />
               <Detail k="Content type" v={c.content_type} />
               <Detail k="Portfolio" v={c.portfolio_links} />
-              <Detail k="Past collabs" v={c.past_collaborations} />
+              <Detail k="Past collaborations" v={c.past_collaborations} />
               <Detail k="Media kit" v={c.media_kit_url} />
             </>
           )}
         </dl>
 
-        <div className="mt-6">
-          <Label className="mb-1.5 block text-xs uppercase tracking-wider text-muted-foreground">Internal notes</Label>
-          <Textarea rows={4} value={notes} onChange={(e) => setNotes(e.target.value)} />
-          <button onClick={() => onSaveNotes(notes)} className="mt-3 rounded-full bg-gradient-brand px-5 py-2 text-xs font-semibold text-primary-foreground">Save notes</button>
+        <div className="mt-8 border-t border-border pt-6">
+          <Label className="overline-label mb-3 block">Internal notes</Label>
+          <Textarea rows={4} value={notes} onChange={(e) => setNotes(e.target.value)} className="bg-background text-sm" />
+          <button
+            onClick={() => onSaveNotes(notes)}
+            className="mt-4 font-body text-xs tracking-[0.15em] uppercase border border-foreground bg-foreground text-background px-5 py-2.5 hover:bg-transparent hover:text-foreground transition-all"
+          >
+            Save notes
+          </button>
         </div>
       </div>
     </div>
@@ -447,9 +525,9 @@ function DetailDrawer({ lead, kind, onClose, onSaveNotes, onStatus }: {
 function Detail({ k, v }: { k: string; v: string | null | undefined }) {
   if (!v) return null;
   return (
-    <div className="flex flex-col">
-      <dt className="text-xs uppercase tracking-wider text-muted-foreground">{k}</dt>
-      <dd className="text-foreground break-words">{v}</dd>
+    <div>
+      <dt className="overline-label mb-0.5">{k}</dt>
+      <dd className="font-body text-sm text-foreground break-words">{v}</dd>
     </div>
   );
 }
