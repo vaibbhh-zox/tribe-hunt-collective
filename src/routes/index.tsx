@@ -11,7 +11,7 @@ import {
   CTASection,
 } from "@/components/LandingSections";
 import { BrandForm } from "@/components/BrandForm";
-import { CreatorForm } from "@/components/CreatorForm";
+import CreatorForm from "@/components/CreatorForm";
 
 export const Route = createFileRoute("/")({
   component: Index,
