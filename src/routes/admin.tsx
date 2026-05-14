@@ -296,7 +296,7 @@ function Stat({ label, value, icon: Icon }: { label: string; value: number; icon
 
 function StatusBadge({ status, onChange }: { status: LeadStatus; onChange?: (s: LeadStatus) => void }) {
   const s = STATUSES.find((x) => x.v === status) ?? STATUSES[0];
-  if (!onChange) return <span className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs" style={{ background: `${s.color}/20`, color: s.color }}><span className="h-1.5 w-1.5 rounded-full" style={{ background: s.color }} />{s.label}</span>;
+  if (!onChange) return <span className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-0.5 text-xs" style={{ color: s.color }}><span className="h-1.5 w-1.5 rounded-full" style={{ background: s.color }} />{s.label}</span>;
   return (
     <select value={status} onChange={(e) => onChange(e.target.value as LeadStatus)} onClick={(e) => e.stopPropagation()}
       className="rounded-full border border-border bg-background/60 px-2.5 py-1 text-xs">
