@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -25,19 +31,46 @@ const schema = z.object({
 const NICHES = ["Beauty", "Skincare", "Fashion", "Lifestyle", "UGC"];
 const BUDGETS = ["< $1k", "$1k – $5k", "$5k – $15k", "$15k – $50k", "$50k+"];
 
-export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange: (v: boolean) => void }) {
+export function BrandForm({
+  open,
+  onOpenChange,
+}: {
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
+}) {
   const [step, setStep] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
   const [data, setData] = useState({
-    brand_name: "", website: "", instagram_handle: "", contact_person: "", email: "",
-    budget_range: "", niche: "", campaign_goal: "", creators_needed: "", deliverables: "", notes: "",
+    brand_name: "",
+    website: "",
+    instagram_handle: "",
+    contact_person: "",
+    email: "",
+    budget_range: "",
+    niche: "",
+    campaign_goal: "",
+    creators_needed: "",
+    deliverables: "",
+    notes: "",
   });
 
   const reset = () => {
     setStep(0);
     setDone(false);
-    setData({ brand_name: "", website: "", instagram_handle: "", contact_person: "", email: "", budget_range: "", niche: "", campaign_goal: "", creators_needed: "", deliverables: "", notes: "" });
+    setData({
+      brand_name: "",
+      website: "",
+      instagram_handle: "",
+      contact_person: "",
+      email: "",
+      budget_range: "",
+      niche: "",
+      campaign_goal: "",
+      creators_needed: "",
+      deliverables: "",
+      notes: "",
+    });
   };
 
   const update = (k: string, v: string) => setData((d) => ({ ...d, [k]: v }));
@@ -49,10 +82,17 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
       return;
     }
     setSubmitting(true);
-    const payload = { ...parsed.data, website: parsed.data.website || null, instagram_handle: parsed.data.instagram_handle || null };
+    const payload = {
+      ...parsed.data,
+      website: parsed.data.website || null,
+      instagram_handle: parsed.data.instagram_handle || null,
+    };
     const { error } = await supabase.from("brands").insert(payload as never);
     setSubmitting(false);
-    if (error) { toast.error(error.message); return; }
+    if (error) {
+      toast.error(error.message);
+      return;
+    }
     setDone(true);
   };
 
@@ -62,14 +102,29 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
       fields: (
         <div className="space-y-5">
           <Field label="Brand name *">
-            <Input value={data.brand_name} onChange={(e) => update("brand_name", e.target.value)} placeholder="e.g. Auré Beauté" className="luxury-input" />
+            <Input
+              value={data.brand_name}
+              onChange={(e) => update("brand_name", e.target.value)}
+              placeholder="e.g. Auré Beauté"
+              className="luxury-input"
+            />
           </Field>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Website">
-              <Input value={data.website} onChange={(e) => update("website", e.target.value)} placeholder="https://" className="luxury-input" />
+              <Input
+                value={data.website}
+                onChange={(e) => update("website", e.target.value)}
+                placeholder="https://"
+                className="luxury-input"
+              />
             </Field>
             <Field label="Instagram">
-              <Input value={data.instagram_handle} onChange={(e) => update("instagram_handle", e.target.value)} placeholder="@yourbrand" className="luxury-input" />
+              <Input
+                value={data.instagram_handle}
+                onChange={(e) => update("instagram_handle", e.target.value)}
+                placeholder="@yourbrand"
+                className="luxury-input"
+              />
             </Field>
           </div>
         </div>
@@ -80,10 +135,21 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
       fields: (
         <div className="space-y-5">
           <Field label="Contact person *">
-            <Input value={data.contact_person} onChange={(e) => update("contact_person", e.target.value)} placeholder="Your full name" className="luxury-input" />
+            <Input
+              value={data.contact_person}
+              onChange={(e) => update("contact_person", e.target.value)}
+              placeholder="Your full name"
+              className="luxury-input"
+            />
           </Field>
           <Field label="Email *">
-            <Input type="email" value={data.email} onChange={(e) => update("email", e.target.value)} placeholder="you@brand.com" className="luxury-input" />
+            <Input
+              type="email"
+              value={data.email}
+              onChange={(e) => update("email", e.target.value)}
+              placeholder="you@brand.com"
+              className="luxury-input"
+            />
           </Field>
         </div>
       ),
@@ -96,21 +162,47 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
             <Chips options={NICHES} value={data.niche} onChange={(v) => update("niche", v)} />
           </Field>
           <Field label="Budget range">
-            <Chips options={BUDGETS} value={data.budget_range} onChange={(v) => update("budget_range", v)} />
+            <Chips
+              options={BUDGETS}
+              value={data.budget_range}
+              onChange={(v) => update("budget_range", v)}
+            />
           </Field>
           <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Creators needed">
-              <Input value={data.creators_needed} onChange={(e) => update("creators_needed", e.target.value)} placeholder="e.g. 5–10" className="luxury-input" />
+              <Input
+                value={data.creators_needed}
+                onChange={(e) => update("creators_needed", e.target.value)}
+                placeholder="e.g. 5–10"
+                className="luxury-input"
+              />
             </Field>
             <Field label="Deliverables">
-              <Input value={data.deliverables} onChange={(e) => update("deliverables", e.target.value)} placeholder="2 reels, 3 stories" className="luxury-input" />
+              <Input
+                value={data.deliverables}
+                onChange={(e) => update("deliverables", e.target.value)}
+                placeholder="2 reels, 3 stories"
+                className="luxury-input"
+              />
             </Field>
           </div>
           <Field label="Campaign goal">
-            <Textarea rows={3} value={data.campaign_goal} onChange={(e) => update("campaign_goal", e.target.value)} placeholder="What does success look like?" className="luxury-input" />
+            <Textarea
+              rows={3}
+              value={data.campaign_goal}
+              onChange={(e) => update("campaign_goal", e.target.value)}
+              placeholder="What does success look like?"
+              className="luxury-input"
+            />
           </Field>
           <Field label="Additional notes">
-            <Textarea rows={2} value={data.notes} onChange={(e) => update("notes", e.target.value)} placeholder="Anything else we should know?" className="luxury-input" />
+            <Textarea
+              rows={2}
+              value={data.notes}
+              onChange={(e) => update("notes", e.target.value)}
+              placeholder="Anything else we should know?"
+              className="luxury-input"
+            />
           </Field>
         </div>
       ),
@@ -121,7 +213,13 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
   const progress = ((step + 1) / steps.length) * 100;
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { onOpenChange(v); if (!v) setTimeout(reset, 300); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(v) => {
+        onOpenChange(v);
+        if (!v) setTimeout(reset, 300);
+      }}
+    >
       <DialogContent className="max-w-xl bg-background border border-border p-0 overflow-hidden shadow-luxury rounded-none">
         {done ? (
           <SuccessView
@@ -133,13 +231,22 @@ export function BrandForm({ open, onOpenChange }: { open: boolean; onOpenChange:
           <div>
             {/* Progress bar */}
             <div className="h-0.5 bg-border">
-              <div className="h-full bg-gold transition-all duration-500" style={{ width: `${progress}%` }} />
+              <div
+                className="h-full bg-gold transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
             </div>
 
             <DialogHeader className="px-8 pt-8 pb-0">
-              <span className="overline-label mb-3 block">Brand Brief — Step {step + 1} of {steps.length}</span>
-              <DialogTitle className="font-display text-2xl font-light text-foreground">{steps[step].title}</DialogTitle>
-              <DialogDescription className="sr-only">Complete all fields to submit your brand brief.</DialogDescription>
+              <span className="overline-label mb-3 block">
+                Brand Brief — Step {step + 1} of {steps.length}
+              </span>
+              <DialogTitle className="font-display text-2xl font-light text-foreground">
+                {steps[step].title}
+              </DialogTitle>
+              <DialogDescription className="sr-only">
+                Complete all fields to submit your brand brief.
+              </DialogDescription>
             </DialogHeader>
 
             <div className="px-8 py-6">{steps[step].fields}</div>
@@ -186,7 +293,15 @@ export function Field({ label, children }: { label: string; children: React.Reac
   );
 }
 
-export function Chips({ options, value, onChange }: { options: string[]; value: string; onChange: (v: string) => void }) {
+export function Chips({
+  options,
+  value,
+  onChange,
+}: {
+  options: string[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((o) => (
@@ -208,14 +323,24 @@ export function Chips({ options, value, onChange }: { options: string[]; value: 
   );
 }
 
-export function SuccessView({ title, subtitle, onClose }: { title: string; subtitle: string; onClose: () => void }) {
+export function SuccessView({
+  title,
+  subtitle,
+  onClose,
+}: {
+  title: string;
+  subtitle: string;
+  onClose: () => void;
+}) {
   return (
     <div className="px-10 py-16 text-center">
       <div className="mx-auto flex h-14 w-14 items-center justify-center border border-gold/50 mb-8">
         <Check className="h-6 w-6 text-gold" />
       </div>
       <h3 className="font-display text-3xl font-light text-foreground">{title}</h3>
-      <p className="mt-3 font-body text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">{subtitle}</p>
+      <p className="mt-3 font-body text-sm text-muted-foreground max-w-sm mx-auto leading-relaxed">
+        {subtitle}
+      </p>
       <button
         onClick={onClose}
         className="mt-10 font-body text-xs tracking-[0.18em] uppercase border border-foreground px-7 py-3 text-foreground hover:bg-foreground hover:text-background transition-all duration-300"

@@ -22,7 +22,10 @@ function NotFoundComponent() {
         <p className="mt-4 text-sm text-muted-foreground font-body">
           The page you are looking for does not exist.
         </p>
-        <Link to="/" className="mt-8 inline-flex items-center gap-2 border border-foreground px-6 py-3 text-xs tracking-widest uppercase font-body hover:bg-foreground hover:text-background transition-colors">
+        <Link
+          to="/"
+          className="mt-8 inline-flex items-center gap-2 border border-foreground px-6 py-3 text-xs tracking-widest uppercase font-body hover:bg-foreground hover:text-background transition-colors"
+        >
           Return home
         </Link>
       </div>
@@ -39,7 +42,10 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
         <h1 className="display-md text-foreground">Something went wrong</h1>
         <p className="mt-3 text-sm text-muted-foreground font-body">{error.message}</p>
         <button
-          onClick={() => { router.invalidate(); reset(); }}
+          onClick={() => {
+            router.invalidate();
+            reset();
+          }}
           className="mt-8 inline-flex items-center gap-2 border border-foreground px-6 py-3 text-xs tracking-widest uppercase font-body hover:bg-foreground hover:text-background transition-colors"
         >
           Try again
@@ -55,9 +61,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Maison Lumière — Luxury Beauty Creator Agency" },
-      { name: "description", content: "Maison Lumière connects luxury beauty brands with elite creators for curated collaborations in skincare, fashion and lifestyle." },
+      {
+        name: "description",
+        content:
+          "Maison Lumière connects luxury beauty brands with elite creators for curated collaborations in skincare, fashion and lifestyle.",
+      },
       { property: "og:title", content: "Maison Lumière — Luxury Beauty Creator Agency" },
-      { property: "og:description", content: "The premier agency for beauty brand and creator collaborations. Curated. Elevated. Intentional." },
+      {
+        property: "og:description",
+        content:
+          "The premier agency for beauty brand and creator collaborations. Curated. Elevated. Intentional.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -65,7 +79,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,
@@ -77,8 +94,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head><HeadContent /></head>
-      <body>{children}<Scripts /></body>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
     </html>
   );
 }
@@ -87,7 +109,9 @@ function AuthSync() {
   const router = useRouter();
   const qc = useQueryClient();
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(() => {
       router.invalidate();
       qc.invalidateQueries();
     });

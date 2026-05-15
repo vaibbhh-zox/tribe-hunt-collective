@@ -22,8 +22,12 @@ export function SiteHeader() {
         <div className="flex h-20 items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex flex-col leading-none">
-            <span className="font-display text-xl font-light tracking-[0.08em] text-foreground">MAISON</span>
-            <span className="font-display text-xl font-light tracking-[0.08em] text-gold -mt-1">LUMIÈRE</span>
+            <span className="font-display text-xl font-light tracking-[0.08em] text-foreground">
+              MAISON
+            </span>
+            <span className="font-display text-xl font-light tracking-[0.08em] text-gold -mt-1">
+              LUMIÈRE
+            </span>
           </Link>
 
           {/* Desktop Nav */}
@@ -66,9 +70,24 @@ export function SiteHeader() {
             className="md:hidden flex flex-col gap-1.5 p-2"
             aria-label="Toggle menu"
           >
-            <span className={"block h-px w-6 bg-foreground transition-all duration-300 " + (menuOpen ? "rotate-45 translate-y-2" : "")} />
-            <span className={"block h-px w-6 bg-foreground transition-all duration-300 " + (menuOpen ? "opacity-0" : "")} />
-            <span className={"block h-px w-6 bg-foreground transition-all duration-300 " + (menuOpen ? "-rotate-45 -translate-y-2" : "")} />
+            <span
+              className={
+                "block h-px w-6 bg-foreground transition-all duration-300 " +
+                (menuOpen ? "rotate-45 translate-y-2" : "")
+              }
+            />
+            <span
+              className={
+                "block h-px w-6 bg-foreground transition-all duration-300 " +
+                (menuOpen ? "opacity-0" : "")
+              }
+            />
+            <span
+              className={
+                "block h-px w-6 bg-foreground transition-all duration-300 " +
+                (menuOpen ? "-rotate-45 -translate-y-2" : "")
+              }
+            />
           </button>
         </div>
       </div>
@@ -96,7 +115,10 @@ export function SiteHeader() {
               {item.label}
             </a>
           ))}
-          <Link to="/admin" className="font-body text-xs tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground transition-colors">
+          <Link
+            to="/admin"
+            className="font-body text-xs tracking-[0.18em] uppercase text-muted-foreground hover:text-foreground transition-colors"
+          >
             Admin
           </Link>
           <a
@@ -118,11 +140,16 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-2">
             <div className="flex flex-col leading-none mb-5">
-              <span className="font-display text-2xl font-light tracking-[0.08em] text-foreground">MAISON</span>
-              <span className="font-display text-2xl font-light tracking-[0.08em] text-gold -mt-1">LUMIÈRE</span>
+              <span className="font-display text-2xl font-light tracking-[0.08em] text-foreground">
+                MAISON
+              </span>
+              <span className="font-display text-2xl font-light tracking-[0.08em] text-gold -mt-1">
+                LUMIÈRE
+              </span>
             </div>
             <p className="font-body text-sm text-muted-foreground max-w-xs leading-relaxed">
-              The premier luxury beauty creator agency. Connecting elevated brands with visionary creators since 2021.
+              The premier luxury beauty creator agency. Connecting elevated brands with visionary
+              creators since 2021.
             </p>
           </div>
 
@@ -131,7 +158,12 @@ export function SiteFooter() {
             <ul className="space-y-3">
               {["Our Story", "The Roster", "Case Studies", "Press"].map((l) => (
                 <li key={l}>
-                  <a href="#" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors link-underline">{l}</a>
+                  <a
+                    href="#"
+                    className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors link-underline"
+                  >
+                    {l}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -142,7 +174,12 @@ export function SiteFooter() {
             <ul className="space-y-3">
               {["For Brands", "For Creators", "Apply Now", "Contact"].map((l) => (
                 <li key={l}>
-                  <a href="#" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors link-underline">{l}</a>
+                  <a
+                    href="#"
+                    className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors link-underline"
+                  >
+                    {l}
+                  </a>
                 </li>
               ))}
             </ul>
@@ -155,7 +192,13 @@ export function SiteFooter() {
           </p>
           <div className="flex items-center gap-6">
             {["Privacy", "Terms", "Instagram"].map((l) => (
-              <a key={l} href="#" className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors">{l}</a>
+              <a
+                key={l}
+                href="#"
+                className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {l}
+              </a>
             ))}
           </div>
         </div>

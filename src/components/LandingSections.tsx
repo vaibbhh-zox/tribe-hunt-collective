@@ -115,7 +115,8 @@ export function CreatorRoster() {
             left
           />
           <p className="font-body text-sm text-muted-foreground max-w-xs leading-relaxed">
-            Every creator in our roster is personally vetted, aesthetically aligned, and strategically matched to brand briefs.
+            Every creator in our roster is personally vetted, aesthetically aligned, and
+            strategically matched to brand briefs.
           </p>
         </div>
 
@@ -136,7 +137,9 @@ export function CreatorRoster() {
               </div>
               <div className="pt-4">
                 <h3 className="font-display text-lg font-light text-foreground">{n.label}</h3>
-                <p className="font-body text-xs text-muted-foreground mt-1 leading-relaxed">{n.desc}</p>
+                <p className="font-body text-xs text-muted-foreground mt-1 leading-relaxed">
+                  {n.desc}
+                </p>
               </div>
             </div>
           ))}
@@ -207,11 +210,31 @@ export function BrandProcess() {
           <p className="overline-label mb-8 text-center">Brands We've Partnered With</p>
           <div className="flex gap-16 animate-marquee whitespace-nowrap">
             {[...Array(2)].map((_, rep) =>
-              ["AURÉ", "Velvet Skin", "NUDE", "The Ritual", "Soft Hours", "BLOOM", "Porcelain", "Elixir Co.", "AURÉ", "Velvet Skin", "NUDE", "The Ritual", "Soft Hours", "BLOOM", "Porcelain", "Elixir Co."].map((b, i) => (
-                <span key={`${rep}-${i}`} className="font-display text-xl font-light text-muted-foreground/60 hover:text-foreground transition-colors flex-shrink-0">
+              [
+                "AURÉ",
+                "Velvet Skin",
+                "NUDE",
+                "The Ritual",
+                "Soft Hours",
+                "BLOOM",
+                "Porcelain",
+                "Elixir Co.",
+                "AURÉ",
+                "Velvet Skin",
+                "NUDE",
+                "The Ritual",
+                "Soft Hours",
+                "BLOOM",
+                "Porcelain",
+                "Elixir Co.",
+              ].map((b, i) => (
+                <span
+                  key={`${rep}-${i}`}
+                  className="font-display text-xl font-light text-muted-foreground/60 hover:text-foreground transition-colors flex-shrink-0"
+                >
                   {b}
                 </span>
-              ))
+              )),
             )}
           </div>
         </div>
@@ -223,10 +246,22 @@ export function BrandProcess() {
 /* ─── Creator Onboarding Section ─────────────────────────── */
 export function CreatorOnboarding() {
   const benefits = [
-    { title: "Curated Brand Matches", desc: "We only send you briefs that genuinely fit your aesthetic and values. No misaligned pitches." },
-    { title: "Transparent Rates", desc: "Guidance on industry-standard rates and support negotiating deals that reflect your worth." },
-    { title: "Agency Backing", desc: "Professional representation — contracts, communication, and creative protection handled for you." },
-    { title: "Long-term Relationships", desc: "We build careers, not one-off posts. Our creators often become brand ambassadors." },
+    {
+      title: "Curated Brand Matches",
+      desc: "We only send you briefs that genuinely fit your aesthetic and values. No misaligned pitches.",
+    },
+    {
+      title: "Transparent Rates",
+      desc: "Guidance on industry-standard rates and support negotiating deals that reflect your worth.",
+    },
+    {
+      title: "Agency Backing",
+      desc: "Professional representation — contracts, communication, and creative protection handled for you.",
+    },
+    {
+      title: "Long-term Relationships",
+      desc: "We build careers, not one-off posts. Our creators often become brand ambassadors.",
+    },
   ];
 
   return (
@@ -241,14 +276,19 @@ export function CreatorOnboarding() {
               <em className="not-italic text-gradient-warm">inner circle.</em>
             </h2>
             <p className="font-body text-base text-muted-foreground leading-relaxed max-w-md">
-              Maison Lumière represents a selective roster of beauty creators across all tiers — from rising micro-voices to established icons. We believe in quality over quantity.
+              Maison Lumière represents a selective roster of beauty creators across all tiers —
+              from rising micro-voices to established icons. We believe in quality over quantity.
             </p>
 
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6">
               {benefits.map((b) => (
                 <div key={b.title} className="border-l-2 border-champagne pl-4">
-                  <h4 className="font-display text-base font-light text-foreground mb-1">{b.title}</h4>
-                  <p className="font-body text-xs text-muted-foreground leading-relaxed">{b.desc}</p>
+                  <h4 className="font-display text-base font-light text-foreground mb-1">
+                    {b.title}
+                  </h4>
+                  <p className="font-body text-xs text-muted-foreground leading-relaxed">
+                    {b.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -264,7 +304,9 @@ export function CreatorOnboarding() {
             </div>
             {/* Floating stat card */}
             <div className="absolute -bottom-6 -left-6 bg-background border border-border p-6 shadow-luxury">
-              <div className="font-display text-4xl font-light text-foreground">340<span className="text-gold">+</span></div>
+              <div className="font-display text-4xl font-light text-foreground">
+                340<span className="text-gold">+</span>
+              </div>
               <div className="overline-label mt-1">Active Creators</div>
             </div>
           </div>
@@ -278,19 +320,22 @@ export function CreatorOnboarding() {
 export function Testimonials() {
   const testimonials = [
     {
-      quote: "Maison Lumière understood our brand's aesthetic before we even finished explaining it. The creators they introduced were extraordinary — every campaign has outperformed our KPIs.",
+      quote:
+        "Maison Lumière understood our brand's aesthetic before we even finished explaining it. The creators they introduced were extraordinary — every campaign has outperformed our KPIs.",
       name: "Sophie Renard",
       role: "Marketing Director, AURÉ Paris",
       img: "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=200",
     },
     {
-      quote: "They matched me with three brands I genuinely love. The deals were fair, the briefs were creative, and I finally felt like my work was being valued properly.",
+      quote:
+        "They matched me with three brands I genuinely love. The deals were fair, the briefs were creative, and I finally felt like my work was being valued properly.",
       name: "Isabelle Chen",
       role: "Beauty Creator, 240k followers",
       img: "https://images.pexels.com/photos/1065084/pexels-photo-1065084.jpeg?auto=compress&cs=tinysrgb&w=200",
     },
     {
-      quote: "Working with an agency that understands the luxury market changed everything. No more creators who don't fit our positioning. Just beautiful, on-brand content every time.",
+      quote:
+        "Working with an agency that understands the luxury market changed everything. No more creators who don't fit our positioning. Just beautiful, on-brand content every time.",
       name: "Marcus Webb",
       role: "Creative Director, Velvet Skin",
       img: "https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?auto=compress&cs=tinysrgb&w=200",
@@ -340,19 +385,15 @@ export function Testimonials() {
 }
 
 /* ─── CTA Section ────────────────────────────────────────── */
-export function CTASection({
-  onBrand,
-  onCreator,
-}: {
-  onBrand: () => void;
-  onCreator: () => void;
-}) {
+export function CTASection({ onBrand, onCreator }: { onBrand: () => void; onCreator: () => void }) {
   return (
     <section id="apply" className="px-6 md:px-12 py-28 bg-foreground">
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div>
-            <span className="overline-label text-background/50 mb-6 block line-ornament">Begin Your Journey</span>
+            <span className="overline-label text-background/50 mb-6 block line-ornament">
+              Begin Your Journey
+            </span>
             <h2 className="display-xl text-background leading-tight">
               Ready to
               <br />
@@ -361,7 +402,8 @@ export function CTASection({
           </div>
           <div>
             <p className="font-body text-base text-background/60 leading-relaxed mb-10">
-              Whether you are a brand seeking the perfect creator or a creator ready to elevate your collaborations — we want to hear from you.
+              Whether you are a brand seeking the perfect creator or a creator ready to elevate your
+              collaborations — we want to hear from you.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <button

@@ -46,7 +46,8 @@ export function Hero({ onBrand, onCreator }: HeroProps) {
             style={{ animationDelay: "0.25s" }}
           >
             <p className="font-body text-base text-muted-foreground leading-relaxed max-w-xs">
-              We curate extraordinary partnerships between visionary beauty brands and the creators who define culture.
+              We curate extraordinary partnerships between visionary beauty brands and the creators
+              who define culture.
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
@@ -80,7 +81,9 @@ export function Hero({ onBrand, onCreator }: HeroProps) {
               key={s.l}
               className={"py-2 " + (i > 0 ? "pl-8 md:pl-14 border-l border-border" : "")}
             >
-              <div className="font-display text-3xl md:text-5xl font-light text-foreground">{s.v}</div>
+              <div className="font-display text-3xl md:text-5xl font-light text-foreground">
+                {s.v}
+              </div>
               <div className="overline-label mt-1">{s.l}</div>
             </div>
           ))}
@@ -88,7 +91,10 @@ export function Hero({ onBrand, onCreator }: HeroProps) {
       </div>
 
       {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in" style={{ animationDelay: "1s" }}>
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-fade-in"
+        style={{ animationDelay: "1s" }}
+      >
         <span className="overline-label text-[0.55rem]">Scroll</span>
         <div className="w-px h-10 bg-gradient-to-b from-foreground/20 to-transparent" />
       </div>
